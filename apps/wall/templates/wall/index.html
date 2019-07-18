@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Wall</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        h1{
+            border-top: 1px solid black;
+        }
+        .addABook{
+            background: rgba(255, 255, 255, 0.87);
+            display: inline-block;
+            vertical-align: top;
+        }
+        th, tr, td{
+            border: 1px solid black;
+            text-align: center;
+            
+        }
+        button{
+            margin-bottom: 10px;
+        }
+        h2, h3, h4{
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 20px;
+        }
+        table{
+            margin-bottom: 10px;
+        }
+        #textbox{
+            height: 30px;
+            width: 400px;
+        }
+        form{
+            margin-bottom: 10px;
+        }
+        .message{
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .username{
+            font-size: 16pt;
+            font-weight: bold;
+            margin: 0px;
+        }
+        .created_at{
+            font-size: 12pt;
+            font-style: italic;
+        }
+        .user_message{
+            padding: 10px;
+            display: inline;
+            font-size: 28pt;
+        }
+        .user_comment{
+            margin-top: 10px;
+            text-indent: 30px;
+        }
+        .messages{
+            padding: 10px;
+            height: auto;
+            width: auto;
+            margin-bottom: 20px;
+        }
+        </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h2>CodingDojo Wall</h2>
+        <h4>Welcome, {{request.session.username}}</h4>
+        <a href="/logout"><button class="btn btn-warning">Logout</button></a>
+        <div class="postmessage">
+            <h4>Post a message</h4>
+            <form action="/post_message" method="POST">
+                {% csrf_token %}
+                <input type="text" name="message" id="textbox">
+                <input class="message" type="submit" value="Post a message">
+            </form>
+        </div>
+        {%for message in messages %}
+            <div class="messages">
+                <p class="username">{{message.creator.username}} <a href="/delete_message/{{message.id}}">Delete</a></p> 
+                <p class="created_at">{{message.creator.created_at}}</p>
+                <p class="user_message">{{message.message}}</p>
+                
+                {% for c in message.comments.all %}
+                    <p class="user_comment">{{c.comment}} <a href="/delete_comment/{{c.id}}"> | Delete |</a></p>
+                {% endfor %}
+            </div>
+            <form action="/post_comment" method="POST">
+                {% csrf_token %}
+                <input type="text" name="comment" id="textbox">
+                <input type="hidden" name="message_id" value="{{message.id}}">
+                <input class="message" type="submit" value="Post a comment">
+            </form>
+        {% endfor %}
+        
+        
+
+        
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
