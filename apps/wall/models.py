@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from apps.logreg.models import User
 # from apps/logreg/models import User
-
+# some code here
 class Message(models.Model):
     message = models.TextField()
     creator = models.ForeignKey(User, related_name="messages")
