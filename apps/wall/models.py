@@ -3,6 +3,7 @@ from django.db import models
 from apps.logreg.models import User
 # from apps/logreg/models import User
 # some code here
+# some more code here
 class Message(models.Model):
     message = models.TextField()
     creator = models.ForeignKey(User, related_name="messages")
